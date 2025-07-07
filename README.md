@@ -1,50 +1,50 @@
-# Getting Started app for Discord
+# **Donnie Thornberry Troll Bot**
 
-This project contains a basic rock-paper-scissors-style Discord app written in JavaScript, built for the [getting started guide](https://discord.com/developers/docs/getting-started).
+Inspired by [aaronr5tv's Donnie ThornberryBot](https://raw.githubusercontent.com/aaronr5tv/DonnieThornberryBot) which used to work until Discord's API changes awhile back.
 
-![Demo of app](https://github.com/discord/discord-example-app/raw/main/assets/getting-started-demo.gif?raw=true)
+DonnieBot is a troll bot made to target a user in your Discord server and join them in VC and talk over them with Donnie's screaming.
 
-## Project structure
-Below is a basic overview of the project structure:
+You can use targets including:
 
-```
-├── examples    -> short, feature-specific sample apps
-│   ├── app.js  -> finished app.js code
-│   ├── button.js
-│   ├── command.js
-│   ├── modal.js
-│   ├── selectMenu.js
-├── .env.sample -> sample .env file
-├── app.js      -> main entrypoint for app
-├── commands.js -> slash command payloads + helpers
-├── game.js     -> logic specific to RPS
-├── utils.js    -> utility functions and enums
-├── package.json
-├── README.md
-└── .gitignore
-```
+-   /set-target
+-   /current-target
+-   /remove-target
+-   /join-vc
+
+to have Donnie join and terrorize your friends in Discord.
+
+## How to Use
+
+You can either [invite DonnieBot to your discord](https://discord.com/oauth2/authorize?client_id=1391512774001164308)
+
+or
+
+Set up this project on your own (see section 'Running app locally').
 
 ## Running app locally
 
 Before you start, you'll need to install [NodeJS](https://nodejs.org/en/download/) and [create a Discord app](https://discord.com/developers/applications) with the proper permissions:
-- `applications.commands`
-- `bot` (with Send Messages enabled)
 
+-   `applications.commands`
+-   `bot` (with Send Messages enabled)
 
 Configuring the app is covered in detail in the [getting started guide](https://discord.com/developers/docs/getting-started).
 
 ### Setup project
 
 First clone the project:
+
 ```
-git clone https://github.com/discord/discord-example-app.git
+git clone https://github.com/georgenakashyan/DonnieBot
 ```
 
 Then navigate to its directory and install dependencies:
+
 ```
-cd discord-example-app
+cd DonnieBot
 npm install
 ```
+
 ### Get app credentials
 
 Fetch the credentials from your app's settings and add them to a `.env` file (see `.env.sample` for an example). You'll need your app ID (`APP_ID`), bot token (`DISCORD_TOKEN`), and public key (`PUBLIC_KEY`).
@@ -100,9 +100,3 @@ Copy the forwarding address that starts with `https`, in this case `https://1234
 On the **General Information** tab, there will be an **Interactions Endpoint URL**. Paste your ngrok address there, and append `/interactions` to it (`https://1234-someurl.ngrok.io/interactions` in the example).
 
 Click **Save Changes**, and your app should be ready to run 🚀
-
-## Other resources
-- Read **[the documentation](https://discord.com/developers/docs/intro)** for in-depth information about API features.
-- Browse the `examples/` folder in this project for smaller, feature-specific code examples
-- Join the **[Discord Developers server](https://discord.gg/discord-developers)** to ask questions about the API, attend events hosted by the Discord API team, and interact with other devs.
-- Check out **[community resources](https://discord.com/developers/docs/topics/community-resources#community-resources)** for language-specific tools maintained by community members.
