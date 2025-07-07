@@ -1,6 +1,7 @@
 import {
 	VoiceConnectionStatus,
 	createAudioPlayer,
+	createAudioResource,
 	entersState,
 	joinVoiceChannel,
 } from "@discordjs/voice";
@@ -17,6 +18,8 @@ import express from "express";
 const app = express();
 // Get port, or default to 3000
 const PORT = process.env.PORT || 3000;
+// Create an audio resource
+const audioFile = createAudioResource("./assets/donnie.mp3");
 
 // Create Discord client for voice functionality
 const client = new Client({
@@ -139,8 +142,13 @@ async function leaveVoiceChannel(guildId) {
 
 async function playAudioFile(guildId) {
 	const connectionData = activeConnections.get(guildId);
-	if (connectionData) {
-		connectionData.player.play(resource);
+	if (!connectionData) return;
+
+	try {
+		// Replace 'path/to/your/audio.mp3' with your actual audio file path
+		connectionData.player.play(audioFile);
+	} catch (error) {
+		console.error("Error playing audio file:", error);
 	}
 }
 
