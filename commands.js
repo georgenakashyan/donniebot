@@ -34,10 +34,19 @@ const CURRENT_TARGET_COMMAND = {
 	contexts: [0, 1, 2],
 };
 
+const JOIN_VC_COMMAND = {
+	name: "join-vc",
+	description: "Join your current voice channel",
+	type: 1,
+	integration_types: [0, 1],
+	contexts: [0, 1, 2],
+};
+
 const ALL_COMMANDS = [
 	SET_TARGET_COMMAND,
 	REMOVE_TARGET_COMMAND,
 	CURRENT_TARGET_COMMAND,
+	JOIN_VC_COMMAND,
 ];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);

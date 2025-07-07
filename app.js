@@ -250,6 +250,43 @@ app.post(
 				});
 			}
 
+			if (name === "join-vc") {
+				const currentTarget = await getTarget(guildId);
+				if (!currentTarget) {
+					return res.send({
+						type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+						data: {
+							content:
+								"❌ No target is currently set for this server.",
+							flags: 64,
+						},
+					});
+				}
+				const targetGuildMember = await client.guilds.cache
+					.get(guildId)
+					.members.fetch(currentTarget);
+				const channelId = targetGuildMember.voice.channelId;
+				if (!channelId) {
+					return res.send({
+						type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+						data: {
+							content:
+								"❌ Current target is not in a voice channel.",
+							flags: 64,
+						},
+					});
+				}
+
+				await joinTargetChannel(guildId, channelId);
+				return res.send({
+					type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+					data: {
+						content: `✅ Joined voice channel <#${channelId}>`,
+						flags: 64,
+					},
+				});
+			}
+
 			console.error(`unknown command: ${name}`);
 			return res.status(400).json({ error: "unknown command" });
 		}
