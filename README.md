@@ -1,6 +1,6 @@
 # **Donnie Thornberry Troll Bot**
 
-Inspired by [aaronr5tv's Donnie ThornberryBot](https://raw.githubusercontent.com/aaronr5tv/DonnieThornberryBot) which used to work until Discord's API changes awhile back.
+Inspired by [aaronr5tv's Donnie ThornberryBot](https://github.com/aaronr5tv/DonnieThornberryBot) which used to work until Discord's API changes awhile back.
 
 DonnieBot is a troll bot made to target a user in your Discord server and join them in VC and talk over them with Donnie's screaming.
 
