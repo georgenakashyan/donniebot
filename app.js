@@ -1,8 +1,6 @@
 import {
-	AudioPlayerStatus,
 	VoiceConnectionStatus,
 	createAudioPlayer,
-	createAudioResource,
 	entersState,
 	joinVoiceChannel,
 } from "@discordjs/voice";
@@ -89,16 +87,14 @@ function setupSpeakingDetection(guildId, connection) {
 	receiver.speaking.on("start", async (userId) => {
 		const targetId = await getTarget(guildId);
 		if (userId === targetId) {
-			console.log(`Target ${userId} started speaking`);
-			await playAudioFile(guildId);
+			playAudioFile(guildId);
 		}
 	});
 
 	receiver.speaking.on("end", async (userId) => {
 		const targetId = await getTarget(guildId);
 		if (userId === targetId) {
-			console.log(`Target ${userId} stopped speaking`);
-			await stopAudioFile(guildId);
+			stopAudioFile(guildId);
 		}
 	});
 }
@@ -143,18 +139,8 @@ async function leaveVoiceChannel(guildId) {
 
 async function playAudioFile(guildId) {
 	const connectionData = activeConnections.get(guildId);
-	if (!connectionData) return;
-
-	try {
-		// Replace 'path/to/your/audio.mp3' with your actual audio file path
-		const resource = createAudioResource("./assets/donnie.mp3");
+	if (connectionData) {
 		connectionData.player.play(resource);
-
-		connectionData.player.on(AudioPlayerStatus.Idle, () => {
-			console.log("Audio playback finished");
-		});
-	} catch (error) {
-		console.error("Error playing audio file:", error);
 	}
 }
 
@@ -162,7 +148,6 @@ async function stopAudioFile(guildId) {
 	const connectionData = activeConnections.get(guildId);
 	if (connectionData) {
 		connectionData.player.stop();
-		console.log("Audio playback stopped");
 	}
 }
 
