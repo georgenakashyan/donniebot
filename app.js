@@ -246,13 +246,27 @@ app.post(
 
 			// Target management commands
 			if (name === "set-target") {
-				const targetUserId = req.body.data.options[0].value;
-				await setTarget(guildId, targetUserId);
+				const targetId = req.body.data.options[0].value;
+				await setTarget(guildId, targetId);
+				const targetGuildMember = await client.guilds.cache
+					.get(guildId)
+					.members.fetch(targetId)
+					.catch(() => null);
+
+				if (targetGuildMember?.voice?.channelId) {
+					console.log(
+						`Joining target in channel ${targetGuildMember.voice.channelId}`
+					);
+					await joinTargetChannel(
+						guildId,
+						targetGuildMember.voice.channelId
+					);
+				}
 
 				return res.send({
 					type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 					data: {
-						content: `🎯 Target set to <@${targetUserId}>! The bot will now follow them in voice channels.`,
+						content: `🎯 Target set to <@${targetId}>! The bot will now follow them in voice channels.`,
 						flags: 64, // Ephemeral
 					},
 				});
