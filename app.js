@@ -33,10 +33,8 @@ const client = new Client({
 const serverTargets = new Map(); // guildId -> userId
 const activeConnections = new Map(); // guildId -> { connection, player }
 
-// Add database functions for target management
+// Target management functions
 async function setTarget(guildId, userId) {
-	// You'll need to implement these database functions
-	// For now, using in-memory storage
 	serverTargets.set(guildId, userId);
 }
 
@@ -84,23 +82,18 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
 	}
 });
 
-// Handle speaking events (when target starts/stops speaking)
-client.on("voiceStateUpdate", async (oldState, newState) => {
-	const guildId = newState.guild.id;
-	const userId = newState.member.id;
-	const targetId = await getTarget(guildId);
+// Handle speaking detection through voice receiver
+function setupSpeakingDetection(guildId, connection) {
+	const receiver = connection.receiver;
 
-	if (userId !== targetId) return;
-
-	const connection = activeConnections.get(guildId);
-	if (!connection) return;
-
-	// Check if user started speaking
-	if (newState.speaking) {
-		console.log(`Target ${userId} started speaking`);
-		await playAudioFile(guildId);
-	}
-});
+	receiver.speaking.on("start", async (userId) => {
+		const targetId = await getTarget(guildId);
+		if (userId === targetId) {
+			console.log(`Target ${userId} started speaking`);
+			await playAudioFile(guildId);
+		}
+	});
+}
 
 async function joinTargetChannel(guildId, channelId) {
 	try {
@@ -120,6 +113,9 @@ async function joinTargetChannel(guildId, channelId) {
 
 		const player = createAudioPlayer();
 		connection.subscribe(player);
+
+		// Set up speaking detection
+		setupSpeakingDetection(guildId, connection);
 
 		activeConnections.set(guildId, { connection, player });
 		console.log(`Joined voice channel ${channelId} in guild ${guildId}`);
@@ -142,8 +138,8 @@ async function playAudioFile(guildId) {
 	if (!connectionData) return;
 
 	try {
-		// TODO Replace 'path/to/your/audio.mp3' with your actual audio file path
-		const resource = createAudioResource("./assets/donnie.opus");
+		// Replace 'path/to/your/audio.mp3' with your actual audio file path
+		const resource = createAudioResource("./assets/donnie.mp3");
 		connectionData.player.play(resource);
 
 		connectionData.player.on(AudioPlayerStatus.Idle, () => {
@@ -165,8 +161,8 @@ app.post(
 	"/interactions",
 	verifyKeyMiddleware(process.env.PUBLIC_KEY),
 	async function (req, res) {
-		// Interaction id, type and data
-		const { id, type, data } = req.body;
+		// Interaction type and data
+		const { type, id, data } = req.body;
 
 		/**
 		 * Handle verification requests
@@ -186,7 +182,7 @@ app.post(
 				context === 0 ? req.body.member.user.id : req.body.user.id;
 			const guildId = req.body.guild_id;
 
-			// New target management commands
+			// Target management commands
 			if (name === "set-target") {
 				const targetUserId = req.body.data.options[0].value;
 				await setTarget(guildId, targetUserId);
@@ -246,7 +242,13 @@ app.post(
 					},
 				});
 			}
+
+			console.error(`unknown command: ${name}`);
+			return res.status(400).json({ error: "unknown command" });
 		}
+
+		console.error("unknown interaction type", type);
+		return res.status(400).json({ error: "unknown interaction type" });
 	}
 );
 
