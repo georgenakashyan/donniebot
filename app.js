@@ -93,6 +93,14 @@ function setupSpeakingDetection(guildId, connection) {
 			await playAudioFile(guildId);
 		}
 	});
+
+	receiver.speaking.on("end", async (userId) => {
+		const targetId = await getTarget(guildId);
+		if (userId === targetId) {
+			console.log(`Target ${userId} stopped speaking`);
+			await stopAudioFile(guildId);
+		}
+	});
 }
 
 async function joinTargetChannel(guildId, channelId) {
@@ -147,6 +155,14 @@ async function playAudioFile(guildId) {
 		});
 	} catch (error) {
 		console.error("Error playing audio file:", error);
+	}
+}
+
+async function stopAudioFile(guildId) {
+	const connectionData = activeConnections.get(guildId);
+	if (connectionData) {
+		connectionData.player.stop();
+		console.log("Audio playback stopped");
 	}
 }
 
