@@ -35,7 +35,7 @@ Configuring the app is covered in detail in the [getting started guide](https://
 First clone the project:
 
 ```
-git clone https://github.com/georgenakashyan/DonnieBot
+git clone https://github.com/georgenakashyan/DonnieBot.git
 ```
 
 Then navigate to its directory and install dependencies:
