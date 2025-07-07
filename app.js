@@ -58,6 +58,59 @@ client.on(Events.VoiceStateUpdate, async (oldState, newState) => {
 	const userId = newState.member.id;
 	const targetId = await getTarget(guildId);
 
+	// Handle bot being moved/kicked from voice channel
+	if (userId === client.user.id && targetId) {
+		// Bot was kicked out of channel completely
+		if (oldState.channelId && !newState.channelId) {
+			console.log(`Bot was kicked from channel ${oldState.channelId}`);
+			// Find where the target is and rejoin
+			const targetGuildMember = await client.guilds.cache
+				.get(guildId)
+				.members.fetch(targetId)
+				.catch(() => null);
+
+			if (targetGuildMember?.voice?.channelId) {
+				console.log(
+					`Rejoining target in channel ${targetGuildMember.voice.channelId}`
+				);
+				await joinTargetChannel(
+					guildId,
+					targetGuildMember.voice.channelId
+				);
+			}
+		}
+		// Bot was moved to a different channel
+		else if (
+			oldState.channelId &&
+			newState.channelId &&
+			oldState.channelId !== newState.channelId
+		) {
+			console.log(
+				`Bot was moved from ${oldState.channelId} to ${newState.channelId}`
+			);
+			// Find where the target is
+			const targetGuildMember = await client.guilds.cache
+				.get(guildId)
+				.members.fetch(targetId)
+				.catch(() => null);
+
+			// If target is in a different channel than where bot was moved, rejoin target
+			if (
+				targetGuildMember?.voice?.channelId &&
+				targetGuildMember.voice.channelId !== newState.channelId
+			) {
+				console.log(
+					`Target is in ${targetGuildMember.voice.channelId}, rejoining target`
+				);
+				await leaveVoiceChannel(guildId);
+				await joinTargetChannel(
+					guildId,
+					targetGuildMember.voice.channelId
+				);
+			}
+		}
+	}
+
 	// Check if the user is our target
 	if (userId !== targetId) return;
 
