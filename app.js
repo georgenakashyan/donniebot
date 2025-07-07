@@ -18,6 +18,8 @@ import express from "express";
 const app = express();
 // Get port, or default to 3000
 const PORT = process.env.PORT || 3000;
+// Audio file path
+const pathToAudioFile = "./assets/donnie.mp3";
 
 // Create Discord client for voice functionality
 const client = new Client({
@@ -143,7 +145,7 @@ async function playAudioFile(guildId) {
 	if (!connectionData) return;
 
 	try {
-		const audioFile = createAudioResource("./assets/donnie.mp3");
+		const audioFile = createAudioResource(pathToAudioFile);
 		connectionData.player.play(audioFile);
 	} catch (error) {
 		console.error("Error playing audio file:", error);
