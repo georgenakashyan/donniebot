@@ -145,7 +145,6 @@ async function playAudioFile(guildId) {
 	if (!connectionData) return;
 
 	try {
-		// Replace 'path/to/your/audio.mp3' with your actual audio file path
 		connectionData.player.play(audioFile);
 	} catch (error) {
 		console.error("Error playing audio file:", error);
