@@ -13,13 +13,17 @@ import {
 import { Client, Events, GatewayIntentBits } from "discord.js";
 import "dotenv/config";
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Create an express app
 const app = express();
 // Get port, or default to 3000
 const PORT = process.env.PORT || 3000;
 // Audio file path
-const pathToAudioFile = "./assets/donnie.mp3";
+const pathToAudioFile = path.join(__dirname, "..", "assets", "donnie.mp3");
 
 // Create Discord client for voice functionality
 const client = new Client({
