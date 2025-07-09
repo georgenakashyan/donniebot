@@ -20,8 +20,8 @@ const __dirname = path.dirname(__filename);
 
 // Create an express app
 const app = express();
-// Get port, or default to 3000
-const PORT = process.env.PORT || 3000;
+// Get port, or default to 9000
+const PORT = process.env.PORT || 9000;
 // Audio file path
 const pathToAudioFile = path.join(__dirname, "..", "assets", "donnie.mp3");
 
