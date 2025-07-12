@@ -1,4 +1,5 @@
 #!/bin/bash
 cd /root/DonnieBot
 git pull origin main
-sudo ./startup.sh
+npm run start
+ngrok http --url="$NGROK_SUBDOMAIN" 9000 > /dev/null 2>&1 &
