@@ -100,4 +100,3 @@ Copy the forwarding address that starts with `https`, in this case `https://1234
 On the **General Information** tab, there will be an **Interactions Endpoint URL**. Paste your ngrok address there, and append `/interactions` to it (`https://1234-someurl.ngrok.io/interactions` in the example).
 
 Click **Save Changes**, and your app should be ready to run 🚀
-
