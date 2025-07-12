@@ -1,20 +1,17 @@
 name: Deploy to DigitalOcean
-
 on:
     push:
         branches:
             - main
-
 jobs:
     deploy:
         runs-on: ubuntu-latest
-
         steps:
-            - name: webfactory/ssh-agent
+            - name: Setup SSH Agent
               uses: webfactory/ssh-agent@v0.9.0
               with:
                   ssh-private-key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
 
             - name: Deploy to Droplet
               run: |
-                  ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ${{secrets.DO_USERNAME}}@${{ secrets.DO_DROPLET_IP }} "/root/DonnieBot/scripts/deploy.sh"
+                  ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USERNAME }}@${{ secrets.DO_DROPLET_IP }} "/root/DonnieBot/scripts/deploy.sh"
