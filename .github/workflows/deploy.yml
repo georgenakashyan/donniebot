@@ -14,4 +14,4 @@ jobs:
 
             - name: Deploy to Droplet
               run: |
-                  ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USERNAME }}@${{ secrets.DO_DROPLET_IP }} "/root/DonnieBot/scripts/deploy.sh"
+                  ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USERNAME }}@${{ secrets.DO_DROPLET_IP }} "bash /root/DonnieBot/scripts/deploy.sh"
