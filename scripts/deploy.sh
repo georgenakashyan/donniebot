@@ -1,4 +1,4 @@
 #!/bin/bash
-cd /DonnieBot
+cd /root/DonnieBot
 git pull origin main
 sudo systemctl restart DonnieBot
