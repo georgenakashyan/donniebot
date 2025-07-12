@@ -1,4 +1,4 @@
 #!/bin/bash
 cd /root/DonnieBot
 git pull origin main
-sudo docker compose up --build
+sudo ./startup.sh
