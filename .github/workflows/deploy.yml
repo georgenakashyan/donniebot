@@ -22,4 +22,5 @@ jobs:
                   username: ${{ secrets.DO_USERNAME }}
                   key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
                   script: |
+                      chmod +x /root/donniebot/scripts/deploy.sh
                       /root/donniebot/scripts/deploy.sh
