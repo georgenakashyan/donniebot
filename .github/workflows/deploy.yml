@@ -1,17 +1,75 @@
-name: Deploy to DigitalOcean
+name: Build and Deploy to DigitalOcean
+
 on:
     push:
-        branches:
-            - main
-jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Setup SSH Agent
-              uses: webfactory/ssh-agent@v0.9.0
-              with:
-                  ssh-private-key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+        branches: [main]
 
-            - name: Deploy to Droplet
-              run: |
-                  ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USERNAME }}@${{ secrets.DO_DROPLET_IP }} "bash /root/DonnieBot/scripts/deploy.sh"
+env:
+    REGISTRY: ghcr.io
+    IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Log in to Container Registry
+              uses: docker/login-action@v3
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Extract metadata
+              id: meta
+              uses: docker/metadata-action@v5
+              with:
+                  images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+                  tags: |
+                      type=ref,event=branch
+                      type=sha
+                      type=raw,value=latest
+
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  push: true
+                  tags: ${{ steps.meta.outputs.tags }}
+                  labels: ${{ steps.meta.outputs.labels }}
+
+            - name: Deploy to DigitalOcean
+              uses: appleboy/ssh-action@v1.0.0
+              with:
+                  host: ${{ secrets.DO_DROPLET_IP }}
+                  username: ${{ secrets.DO_USERNAME }}
+                  key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+                  script: |
+                      # Login to GitHub Container Registry
+                      echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+                      # Pull the latest image
+                      docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+                      # Stop and remove existing container
+                      docker stop donniebot || true
+                      docker rm donniebot || true
+
+                      # Run new container
+                      docker run -d \
+                        --name donniebot \
+                        --restart unless-stopped \
+                        -p 80:3000 \
+                        ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+                      # Clean up old images
+                      docker image prune -f
+
+                      # Show running containers
+                      docker ps
