@@ -22,4 +22,4 @@ jobs:
                   username: ${{ secrets.DO_USERNAME }}
                   key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
                   script: |
-                      ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USERNAME }}@${{ secrets.DO_DROPLET_IP }} "/root/donniebot/scripts/deploy.sh"
+                      /root/donniebot/scripts/deploy.sh
