@@ -1,4 +1,4 @@
 #!/bin/bash
-cd /root/DonnieBot
+cd /root/donniebot
 git pull origin main
-docker build -t donnie-bot .
+sudo systemctl restart donniebot
