@@ -1,4 +1,6 @@
 # **Donnie Thornberry Troll Bot**
+[![Better Stack Badge](https://uptime.betterstack.com/status-badges/v1/monitor/212yg.svg)](https://uptime.betterstack.com/?utm_source=status_badge) 
+
 
 Inspired by [aaronr5tv's Donnie ThornberryBot](https://github.com/aaronr5tv/DonnieThornberryBot) which used to work until Discord's API changes awhile back.
 
