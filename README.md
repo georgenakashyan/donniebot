@@ -4,7 +4,7 @@ Inspired by [aaronr5tv's Donnie ThornberryBot](https://github.com/aaronr5tv/Donn
 
 DonnieBot is a troll bot made to target a user in your Discord server and join them in VC and talk over them with Donnie's screaming.
 
-You can use targets including:
+Includes these commands:
 
 -   /set-target
 -   /current-target
