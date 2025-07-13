@@ -7,5 +7,5 @@ cd /root/donniebot
 export NODE_ENV=production
 
 # Start the bot
-echo "Starting Donniebot..."
+echo "Starting DonnieBot..."
 npm run start
