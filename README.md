@@ -1,104 +1,127 @@
-# **Donnie Thornberry Troll Bot**
-[![Better Stack Badge](https://uptime.betterstack.com/status-badges/v1/monitor/212yg.svg)](https://uptime.betterstack.com/?utm_source=status_badge) 
+# **Donnie Thornberry Bot**
 
+[![Better Stack Badge](https://uptime.betterstack.com/status-badges/v1/monitor/212yg.svg)](https://uptime.betterstack.com/?utm_source=status_badge)
 
-Inspired by [aaronr5tv's Donnie ThornberryBot](https://github.com/aaronr5tv/DonnieThornberryBot) which used to work until Discord's API changes awhile back.
+A Discord bot inspired by [aaronr5tv's Donnie ThornberryBot](https://github.com/aaronr5tv/DonnieThornberryBot) that joins voice channels and plays Donnie Thornberry's iconic screaming sounds to prank friends in your Discord server.
 
-DonnieBot is a troll bot made to target a user in your Discord server and join them in VC and talk over them with Donnie's screaming.
+## Features
 
-Includes these commands:
+- **Target System**: Set specific users as targets for the bot to follow
+- **Voice Channel Integration**: Automatically joins voice channels where targets are present
+- **Audio Playback**: Plays authentic Donnie Thornberry screaming sounds
+- **Server-specific Targeting**: Each Discord server can have its own target
 
--   /set-target
--   /current-target
--   /remove-target
--   /join-vc
+## Commands
 
-to have Donnie join and terrorize your friends in Discord.
+- `/set-target <user>` - Set a user as Donnie's target
+- `/current-target` - View the current target for this server
+- `/remove-target` - Remove the current target
+- `/join-vc` - Make Donnie join your current voice channel
 
-## How to Use
+## Quick Start
 
-You can either [invite DonnieBot to your discord](https://discord.com/oauth2/authorize?client_id=1391512774001164308)
+### Option 1: Invite the Bot
 
-or
+[Invite DonnieBot to your Discord server](https://discord.com/oauth2/authorize?client_id=1391512774001164308)
 
-Set up this project on your own (see section 'Running app locally').
+### Option 2: Self-Host
 
-## Running app locally
+#### Prerequisites
 
-Before you start, you'll need to install [NodeJS](https://nodejs.org/en/download/) and [create a Discord app](https://discord.com/developers/applications) with the proper permissions:
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [Discord Developer Application](https://discord.com/developers/applications)
 
--   `applications.commands`
--   `bot` (with Send Messages enabled)
+#### Required Bot Permissions
 
-Configuring the app is covered in detail in the [getting started guide](https://discord.com/developers/docs/getting-started).
+- `applications.commands` (Slash Commands)
+- `bot` with:
+  - Send Messages
+  - Connect (Voice)
+  - Speak (Voice)
 
-### Setup project
+#### Installation
 
-First clone the project:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/georgenakashyan/DonnieBot.git
+   cd DonnieBot
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file with your Discord bot credentials:
+   ```env
+   DISCORD_TOKEN=your_bot_token_here
+   APP_ID=your_application_id_here
+   PUBLIC_KEY=your_public_key_here
+   ```
+
+4. Register slash commands:
+   ```bash
+   npm run register
+   ```
+
+5. Start the bot:
+   ```bash
+   npm start
+   ```
+
+   For development with auto-restart:
+   ```bash
+   npm run dev
+   ```
+
+#### Setting up Interactions Endpoint (for self-hosting)
+
+If self-hosting, you'll need to set up a public endpoint for Discord interactions:
+
+1. Install and start ngrok:
+   ```bash
+   ngrok http 9000
+   ```
+
+2. Copy the HTTPS forwarding URL (e.g., `https://1234-example.ngrok.io`)
+
+3. In your [Discord Developer Portal](https://discord.com/developers/applications):
+   - Go to your application's **General Information** tab
+   - Set **Interactions Endpoint URL** to: `https://your-ngrok-url.ngrok.io/interactions`
+   - Save changes
+
+## Project Structure
 
 ```
-git clone https://github.com/georgenakashyan/DonnieBot.git
+DonnieBot/
+├── src/
+│   ├── app.js          # Main bot application
+│   ├── commands.js     # Slash command definitions
+│   └── utils.js        # Utility functions
+├── assets/
+│   ├── donnie.mp3      # Donnie's screaming audio
+│   └── pfp.jpeg        # Bot profile picture
+├── scripts/
+│   └── startup.sh      # Deployment script
+└── package.json        # Dependencies & scripts
 ```
 
-Then navigate to its directory and install dependencies:
+## How It Works
 
-```
-cd DonnieBot
-npm install
-```
+1. Use `/set-target` to designate a user as the target
+2. When the target joins a voice channel, DonnieBot automatically joins too
+3. The bot plays Donnie Thornberry screaming sounds to create a fun (chaotic) experience
+4. Use `/remove-target` to stop the targeting
 
-### Get app credentials
+## Contributing
 
-Fetch the credentials from your app's settings and add them to a `.env` file (see `.env.sample` for an example). You'll need your app ID (`APP_ID`), bot token (`DISCORD_TOKEN`), and public key (`PUBLIC_KEY`).
+Feel free to submit issues and pull requests to improve the bot!
 
-Fetching credentials is covered in detail in the [getting started guide](https://discord.com/developers/docs/getting-started).
+## License
 
-> 🔑 Environment variables can be added to the `.env` file in Glitch or when developing locally, and in the Secrets tab in Replit (the lock icon on the left).
+MIT License - see [LICENSE](LICENSE) file for details.
 
-### Install slash commands
+## Credits
 
-The commands for the example app are set up in `commands.js`. All of the commands in the `ALL_COMMANDS` array at the bottom of `commands.js` will be installed when you run the `register` command configured in `package.json`:
-
-```
-npm run register
-```
-
-### Run the app
-
-After your credentials are added, go ahead and run the app:
-
-```
-node app.js
-```
-
-> ⚙️ A package [like `nodemon`](https://github.com/remy/nodemon), which watches for local changes and restarts your app, may be helpful while locally developing.
-
-If you aren't following the [getting started guide](https://discord.com/developers/docs/getting-started), you can move the contents of `examples/app.js` (the finished `app.js` file) to the top-level `app.js`.
-
-### Set up interactivity
-
-The project needs a public endpoint where Discord can send requests. To develop and test locally, you can use something like [`ngrok`](https://ngrok.com/) to tunnel HTTP traffic.
-
-Install ngrok if you haven't already, then start listening on port `3000`:
-
-```
-ngrok http 3000
-```
-
-You should see your connection open:
-
-```
-Tunnel Status                 online
-Version                       2.0/2.0
-Web Interface                 http://127.0.0.1:4040
-Forwarding                    https://1234-someurl.ngrok.io -> localhost:3000
-
-Connections                  ttl     opn     rt1     rt5     p50     p90
-                              0       0       0.00    0.00    0.00    0.00
-```
-
-Copy the forwarding address that starts with `https`, in this case `https://1234-someurl.ngrok.io`, then go to your [app's settings](https://discord.com/developers/applications).
-
-On the **General Information** tab, there will be an **Interactions Endpoint URL**. Paste your ngrok address there, and append `/interactions` to it (`https://1234-someurl.ngrok.io/interactions` in the example).
-
-Click **Save Changes**, and your app should be ready to run 🚀
+- Original concept by [aaronr5tv](https://github.com/aaronr5tv/DonnieThornberryBot)
+- Audio clips from "The Wild Thornberrys" animated series
