@@ -22,7 +22,7 @@ A Discord bot inspired by [aaronr5tv's Donnie ThornberryBot](https://github.com/
 
 ### Option 1: Invite the Bot
 
-[Invite DonnieBot to your Discord server](https://discord.com/oauth2/authorize?client_id=1391512774001164308)
+[Invite DonnieBot to your Discord server](https://discord.com/oauth2/authorize?client_id=1403052087771926618)
 
 ### Option 2: Self-Host
 
